@@ -9,7 +9,7 @@ txt = File.open(filename)
 #outputs a string containing the filename variable
 puts "Here's your file: #{filename}"
 #outputs the result of the 'read' method being called on the 'txt' variable which is a file
-puts txt.read
+puts txt.read()
 
 #outputs a string
 puts "I'll also ask you to type it again:"
@@ -23,3 +23,6 @@ txt_again = File.open(file_again)
 
 #outputs the results of the 'read' method being called on the 'txt_again' file
 puts txt_again.read()
+
+txt.close()
+txt_again.close()
