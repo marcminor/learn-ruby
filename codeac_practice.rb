@@ -45,3 +45,21 @@ end
 puts a || b
 puts "------"
 puts a && b
+
+
+#concatenation operator as replacement for .push method and += combined operator
+alphabet = ["a", "b", "c"]
+alphabet << "d" # Update me!
+puts alphabet
+
+caption = "A giraffe surrounded by " << "weezards!" # Me, too!
+puts caption
+
+#practicing the conditional assignment operator
+
+puts "what's the name of your favorite animal?"
+animal_name = gets.chomp()
+favorite_animal ||= animal_name
+puts favorite_animal
+favorite_animal ||= "albatross"
+puts favorite_animal
