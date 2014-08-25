@@ -1,3 +1,3 @@
-We are at the hampton inn
-I am sitting in the sitting room
-I am learning ruby the hard way
+What up!
+I am sitting in bed!
+I am testing an OLD script that I wrote.
