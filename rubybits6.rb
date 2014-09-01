@@ -153,23 +153,20 @@ class Game
     @created_at = Time.now
   end
 
-  def play
-    begin
+  def emulate
       emulator = Emulator.new(system)
-      emulator.play(self)
+      yield emulator
     rescue Exception => e
       puts "Emulator failed: #{e}"
-    end
+  end
+
+  def play
+    emulate { |emulator| emulator.play(self) }
   end
 
   def screenshot
-    begin
-      emulator = Emulator.new(system)
-      emulator.start(self)
-      emulator.screenshot
-    rescue Exception => e
-      puts "Emulator failed: #{e}"
-    end
+    emulate { |emulator| emulator.start(self) }
+    emulate { |emulator| emulator.screenshot }
   end
 end
 
