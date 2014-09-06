@@ -70,18 +70,143 @@
 #   end
 # end
 
+# /refactored/
 class Game
   SYSTEMS = ['SNES', 'PS1', 'Genesis']
 
   attr_accessor :name, :year, :system
 
+  def initialize(name, options=[])
+    self.name = name
+    self.year = options[:year]
+    self.system = options[:system]
+  end
+  
   SYSTEMS.each do |system|
-  	define_method runs_on_snes? do
-  		system =~ @system
+  	define_method "runs_on_#{system.downcase}?" do
+  		SYSTEMS.detect(system)
   	end
-
-  	end
-  end
-  end
   end
 end
+
+# game1 = Game.new("Tekken", year: 1982, system: "Nintendo")
+# puts game1.system
+# puts game1.name
+# puts game1.year
+
+# /refactor to use .send/
+# class Library
+#   attr_accessor :games
+ 
+#   def initialize(games)
+#     self.games = games
+#   end
+ 
+#   def list
+#     puts games.join("\n")
+#   end
+ 
+#   def emulate(name)
+#     game = find(name)
+#     puts "Starting emulator for #{game}..."
+#   end
+ 
+#  protected
+#   def find(name)
+#     games.detect { |game| game.name == name }
+#   end
+# end
+
+# GAMES = [
+#   Game.new('Contra', year: 1987, system: 'NES'),
+#   Game.new('Civilization', year: 1991, system: 'PC'),
+#   Game.new('The Legend of Zelda', year: 1986, system: 'NES'),
+#   Game.new('Mega Man X2', year: 1995, system: 'SNES'),
+#   Game.new('Super Metroid', year: 1994, system: 'SNES'),
+#   Game.new('Sim City 2000', year: 1993, system: 'PC'),
+#   Game.new('Starcraft', year: 1998, system: 'PC')
+# ]
+
+# # library = Library.new(GAMES)
+# # library.list
+# # library.emulate("Contra")
+# # game = library.find("Contra")
+
+# /refactored/
+# library = Library.new(GAMES)
+# library.public_send(:list)
+# library.public_send(:emulate, "Contra")
+# game = library.send(:find, "Contra")
+
+# /refactor to check if the method exists, then call them/
+# emulate = library.method(:emulate)
+# list = library.method(:list)
+# emulate.call("Contra")
+# list.call
+ 
+/refactoring, continued.../
+
+# class Library
+#   attr_accessor :games
+
+#   def each(&block)
+#     games.each(&block)
+#   end
+
+#   def map(&block)
+#     games.map(&block)
+#   end
+
+#   def select(&block)
+#     games.select(&block)
+#   end
+# end
+
+/refactored using define_method to avoid duplicating code/
+class Library
+  attr_accessor :games
+
+  define_method(:each)
+  define_method(:map)
+  define_method(:select)
+
+  define_method method.send
+
+  games.send(:each, &block)
+  games.send(:map, &block)
+  games.send(:select, &block)
+
+  def initialize(games)
+    self.games = games
+  end
+
+  def each(&block)
+    games.each(&block)
+  end
+
+  def map(&block)
+    games.map(&block)
+  end
+
+  def select(&block)
+    games.select(&block)
+  end
+end
+
+
+GAMES = [
+  Game.new('Contra', year: 1987, system: 'NES'),
+  Game.new('Civilization', year: 1991, system: 'PC'),
+  Game.new('The Legend of Zelda', year: 1986, system: 'NES'),
+  Game.new('Mega Man X2', year: 1995, system: 'SNES'),
+  Game.new('Super Metroid', year: 1994, system: 'SNES'),
+  Game.new('Sim City 2000', year: 1993, system: 'PC'),
+  Game.new('Starcraft', year: 1998, system: 'PC')
+]
+
+
+library = Library.new(GAMES)
+
+library.each { |game| puts "#{game.name}" }
+
+
