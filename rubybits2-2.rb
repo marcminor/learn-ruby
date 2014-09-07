@@ -166,15 +166,20 @@ end
 class Library
   attr_accessor :games
 
-  define_method(:each)
-  define_method(:map)
-  define_method(:select)
+  [:each, :map, :select].each do |method|
+    define_method(method) do |&block|
+      games.send(method, &block)
+    end
+  end
 
-  define_method method.send
 
-  games.send(:each, &block)
-  games.send(:map, &block)
-  games.send(:select, &block)
+  games.each do |game|
+    
+      game.send(:each, &block)
+      game.send(:map, &block)
+      game.send(:select, &block)
+    end
+  end
 
   def initialize(games)
     self.games = games
