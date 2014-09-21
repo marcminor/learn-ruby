@@ -1,0 +1,9 @@
+<h1>All Soups</h1>
+
+<ul>
+	<% @soups.each do |soup| %>
+	<li><%= link_to soup.name, soup %></li>
+	<% end %>
+</ul>
+
+<p><%= link_to "See all Soup Categories", categories_path %></p>
