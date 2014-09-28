@@ -81,12 +81,10 @@ class AboutSandwichCode < Neo::Koan
 
   def find_line2(file_name)
      file_sandwich(file_name) do |file|
-    while file = file.gets
+    while line = file.gets
       return line if line.match(/e/)
     end
     end
-  ensure  
-    file.close if file
   end
 
   def test_finding_lines2
